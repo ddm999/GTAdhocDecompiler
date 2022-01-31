@@ -1,5 +1,4 @@
 import argparse, re, subprocess
-from xml.dom.expatbuilder import parseString
 
 RE_ORIGINAL_FILE_NAME = r"Original File Name: ([^\n]*)"
 
