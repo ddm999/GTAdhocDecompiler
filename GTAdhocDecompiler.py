@@ -134,13 +134,12 @@ for line in lines:
             typename = "function" if x == "FUNCTION_CONST" else "method"
             stringout += f"{typename}({argstring[:-2] if argstring else ''}) {{"
         case "VARIABLE_EVAL":
-            varname = re_instr.group(3).split(',')[-2]
+            varname = re_instr.group(3).strip().split(',')[-2]
             linestack.append(varname)
         case "ATTRIBUTE_EVAL":
             varname = linestack.pop(-1)
-            linestack.append(f"{varname}.{re_instr.group(3)}")
+            linestack.append(f"{varname}.{re_instr.group(3).strip().split(',')[-1]}")
         case "CALL":
-            print("CALL", linestack, re_instr.group(3))
             argcount = int(re_instr.group(3).split('=')[-1])
             if argcount >= len(linestack):
                 for i in range(1 + argcount - len(linestack)):
@@ -242,7 +241,7 @@ for line in lines:
         case "UNARY_OPERATOR":
             operator = re_instr.group(3).strip(" ").split(" ")[0]
             var = linestack.pop(-1)
-            linestack.append(f"{operator}{var}")
+            linestack.append(f"{operator.replace('@', var) if '@' in operator else operator+var}")
         case "LOGICAL_OR":
             expr = linestack.pop(-1)
             stringout += f"<condition='{expr}' || OR>"
