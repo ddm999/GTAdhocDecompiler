@@ -74,6 +74,7 @@ if NEW_FILE.endswith(".ad"):
             capture_output=True,
             check=True,
         )
+        print("Ran GTAdhocCompiler.exe to turn 'new_file' .ad into a .adc")
     except FileNotFoundError:
         print("==> When providing an .ad file, GTAdhocCompiler.exe must be on the $PATH or in cwd.")
         exit(1)
@@ -86,6 +87,7 @@ if NEW_FILE.endswith(".adc"):
             capture_output=True,
             check=True,
         )
+        print("Ran GTAdhocTools.exe to turn 'new_file' .adc into a .ad.diss")
     except FileNotFoundError:
         print("==> When providing an .adc (or .ad) file, GTAdhocTools.exe must be on the $PATH or in cwd.")
         exit(1)
@@ -98,6 +100,7 @@ if ORIG_FILE.endswith(".adc"):
             capture_output=True,
             check=True,
         )
+        print("Ran GTAdhocTools.exe to turn 'original_file' .adc into a .ad.diss")
     except FileNotFoundError:
         print("==> When providing an .adc file, GTAdhocTools.exe must be on the $PATH or in cwd.")
         exit(1)
