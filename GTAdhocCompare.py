@@ -63,7 +63,7 @@ parser.add_argument("original_file", help="Original PDI file (.ad.diss, .adc)")
 parser.add_argument("output_file", nargs='?', help="Output HTML file (default is 'comparison.html')")
 parser.add_argument("-L", "--limiter", type=int, help="Amount of line difference to limit (useful for testing while writing)")
 parser.add_argument("-j", "--showjump", action="store_true", help="When set, doesn't obfuscate jump instructions (can cause lots of 'differences' due to LEAVE instructions)")
-parser.add_argument("-l", "--showleave", action="store_true", help="When set, leaves LEAVE instructions in the output (will cause a lot of 'differences')."
+parser.add_argument("-l", "--showleave", action="store_true", help="When set, leaves LEAVE instructions in the output (will cause a lot of 'differences').")
 out = parser.parse_args()
 NEW_FILE = out.new_file # type: str
 ORIG_FILE = out.original_file # type: str
@@ -129,7 +129,7 @@ for line in newlines:
     re_instr = re.search(RE_INSTRUCTION, line)
     if (line == "" or re_instr is None):
         continue
-    if ((not showleave) and re.search(RE_LEAVE, line) is not None):
+    if ((not out.showleave) and re.search(RE_LEAVE, line) is not None):
         continue
 
     line2 = re.sub(RE_INSTRUCTION_COMPONENTS_TO_DROP, "", re_instr.group(1))
@@ -146,7 +146,7 @@ for line in origlines:
     re_instr = re.search(RE_INSTRUCTION, line)
     if (line == "" or re_instr is None):
         continue
-    if ((not showleave) and re.search(RE_LEAVE, line) is not None):
+    if ((not out.showleave) and re.search(RE_LEAVE, line) is not None):
         continue
 
     line2 = re.sub(RE_INSTRUCTION_COMPONENTS_TO_DROP, "", re_instr.group(1))
