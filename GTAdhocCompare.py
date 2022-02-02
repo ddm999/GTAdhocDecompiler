@@ -61,8 +61,9 @@ parser = argparse.ArgumentParser(
 parser.add_argument("new_file", help="Reverse engineered file (.ad.diss, .adc, .ad)")
 parser.add_argument("original_file", help="Original PDI file (.ad.diss, .adc)")
 parser.add_argument("output_file", nargs='?', help="Output HTML file (default is 'comparison.html')")
-parser.add_argument("-l", "--limiter", type=int, help="Amount of line difference to limit (useful for testing while writing)")
+parser.add_argument("-L", "--limiter", type=int, help="Amount of line difference to limit (useful for testing while writing)")
 parser.add_argument("-j", "--showjump", action="store_true", help="When set, doesn't obfuscate jump instructions (can cause lots of 'differences' due to LEAVE instructions)")
+parser.add_argument("-l", "--showleave", action="store_true", help="When set, leaves LEAVE instructions in the output (will cause a lot of 'differences')."
 out = parser.parse_args()
 NEW_FILE = out.new_file # type: str
 ORIG_FILE = out.original_file # type: str
@@ -126,9 +127,11 @@ origlines2 = []
 for line in newlines:
     # any line with an instruction which is not a leave
     re_instr = re.search(RE_INSTRUCTION, line)
-    if (line == "" or re.search(RE_LEAVE, line) is not None or re_instr is None):
+    if (line == "" or re_instr is None):
         continue
-    
+    if ((not showleave) and re.search(RE_LEAVE, line) is not None):
+        continue
+
     line2 = re.sub(RE_INSTRUCTION_COMPONENTS_TO_DROP, "", re_instr.group(1))
     re_jump = re.search(RE_INSTRUCTION_JUMP, line2)
     if re_jump is not None and out.showjump is False:
@@ -141,14 +144,16 @@ newlines = newlines2
 for line in origlines:
     # any line with an instruction which is not a leave
     re_instr = re.search(RE_INSTRUCTION, line)
-    if (line == "" or re.search(RE_LEAVE, line) is not None or re_instr is None):
+    if (line == "" or re_instr is None):
         continue
-    
+    if ((not showleave) and re.search(RE_LEAVE, line) is not None):
+        continue
+
     line2 = re.sub(RE_INSTRUCTION_COMPONENTS_TO_DROP, "", re_instr.group(1))
     re_jump = re.search(RE_INSTRUCTION_JUMP, line2)
     if re_jump is not None and out.showjump is False:
         line2 = re.sub(RE_INSTRUCTION_JUMP, f"Jump:UNK", line2) # re_jump.group(1)
-    
+
     origlines2.append(line2)
 
 origlines = origlines2
