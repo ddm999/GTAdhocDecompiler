@@ -71,39 +71,39 @@ ORIG_FILE = out.original_file # type: str
 if NEW_FILE.endswith(".ad"):
     try:
         subprocess.run(
-            ["GTAdhocCompiler.exe", "-i", NEW_FILE],
+            ["GTAdhocToolchain.exe", "build", "-i", NEW_FILE],
             capture_output=True,
             check=True,
         )
-        print("Ran GTAdhocCompiler.exe to turn 'new_file' .ad into a .adc")
+        print("Ran GTAdhocToolchain.exe to turn 'new_file' .ad into a .adc")
     except FileNotFoundError:
-        print("==> When providing an .ad file, GTAdhocCompiler.exe must be on the $PATH or in cwd.")
+        print("==> When providing an .ad file, GTAdhocToolchain.exe must be on the $PATH or in cwd.")
         exit(1)
     NEW_FILE = NEW_FILE[:-3]+".adc"
 
 if NEW_FILE.endswith(".adc"):
     try:
         subprocess.run(
-            ["GTAdhocTools.exe", NEW_FILE],
+            ["GTAdhocToolchain.exe", NEW_FILE],
             capture_output=True,
             check=True,
         )
-        print("Ran GTAdhocTools.exe to turn 'new_file' .adc into a .ad.diss")
+        print("Ran GTAdhocToolchain.exe to turn 'new_file' .adc into a .ad.diss")
     except FileNotFoundError:
-        print("==> When providing an .adc (or .ad) file, GTAdhocTools.exe must be on the $PATH or in cwd.")
+        print("==> When providing an .adc (or .ad) file, GTAdhocToolchain.exe must be on the $PATH or in cwd.")
         exit(1)
     NEW_FILE = NEW_FILE[:-4]+".ad.diss"
 
 if ORIG_FILE.endswith(".adc"):
     try:
         subprocess.run(
-            ["GTAdhocTools.exe", ORIG_FILE],
+            ["GTAdhocToolchain.exe", ORIG_FILE],
             capture_output=True,
             check=True,
         )
-        print("Ran GTAdhocTools.exe to turn 'original_file' .adc into a .ad.diss")
+        print("Ran GTAdhocToolchain.exe to turn 'original_file' .adc into a .ad.diss")
     except FileNotFoundError:
-        print("==> When providing an .adc file, GTAdhocTools.exe must be on the $PATH or in cwd.")
+        print("==> When providing an .adc file, GTAdhocToolchain.exe must be on the $PATH or in cwd.")
         exit(1)
     ORIG_FILE = ORIG_FILE[:-4]+".ad.diss"
 
